@@ -33,9 +33,9 @@ module.exports = async (req, res) => {
       });
     }
 
-    // Only allow teamMembers folder
-    if (folder !== 'teamMembers') {
-      return res.status(403).json({ error: 'Unauthorized folder' });
+    // Only allow teamMembers and gallery folders
+    if (folder !== 'teamMembers' && folder !== 'gallery') {
+        return res.status(403).json({ error: 'Unauthorized folder' });
     }
 
     // Generate timestamp
@@ -46,7 +46,7 @@ module.exports = async (req, res) => {
       timestamp: timestamp,
       folder: folder,
       public_id: public_id,
-      overwrite: true,
+      overwrite: folder === 'teamMembers',
       invalidate: true,
     };
 
