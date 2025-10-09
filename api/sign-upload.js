@@ -41,14 +41,18 @@ module.exports = async (req, res) => {
     // Generate timestamp
     const timestamp = Math.round(new Date().getTime() / 1000);
 
-    // Parameters to sign
+    // Parameters to sign - only include params that will be sent to Cloudinary
     const params_to_sign = {
-      timestamp: timestamp,
-      folder: folder,
-      public_id: public_id,
-      overwrite: folder === 'teamMembers',
-      invalidate: true,
+        timestamp: timestamp,
+        folder: folder,
+        public_id: public_id,
     };
+    
+    // Only add overwrite and invalidate for teamMembers
+    if (folder === 'teamMembers') {
+        params_to_sign.overwrite = true;
+        params_to_sign.invalidate = true;
+    }
 
     // Generate signature
     const signature = cloudinary.utils.api_sign_request(
